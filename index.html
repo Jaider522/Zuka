@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuka_Sempai</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="glitch-header">
+            <h1 class="glitch" data-text="Zuka_Sempai">D3@d Sy5t3m by Zuka_Sempai</h1>
+            <div class="status-bar">
+                <span class="status">Estado: EN LINEA</span>
+                <span class="time" id="time">00:00:00</span>
+            </div>
+        </header>
+
+        <main>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <span class="terminal-title">TERMINAL_01</span>
+                    <div class="terminal-controls">
+                        <span class="control"></span>
+                        <span class="control"></span>
+                        <span class="control"></span>
+                    </div>
+                </div>
+                <div class="terminal-content" id="terminal">
+                    <p>> INICIALIZANDO SISTEMA....</p>
+                    <p>> ACCEDIENDO AL SISTEMA....</p>
+                    <p>> BIENVENIDA A "LA CARTA"</p>
+                    <div class="input-line">
+                        <span class="prompt">$</span>
+                        <input type="text" class="terminal-input" placeholder="_">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-container">
+                <div class="grid-item">
+                    <h3>DIFICULTAD DE LAS PARTES</h3>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span>PARTE_01............................................30%</span>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 30%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span>PARTE_02............................................50%</span>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 50%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span>PARTE_03 (EN DESARROLLO).............................0%</span>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-item">
+                    <h3>PARTES</h3>
+                    <div class="nodes">
+                        <div class="node">
+                            <label class="node-label">
+                                <input type="checkbox" class="node-checkbox">
+                                <a href="https://www.mediafire.com/file/kmh5vv56s6km5j4/Carta.zip/file" class="node-link" target="_blank">PARTE_01 :: ACTIVA</a>
+                                <span class="node-status">COMPLETED</span>
+                            </label>
+                        </div>
+                        <div class="node">
+                            <label class="node-label">
+                                <input type="checkbox" class="node-checkbox">
+                                <a href="https://example.com/node2" class="node-link" target="_blank">PARTE_02 :: ACTIVA</a>
+                                <span class="node-status">COMPLETED</span>
+                            </label>
+                        </div>
+                        <div class="node">
+                            <label class="node-label">
+                                <input type="checkbox" class="node-checkbox">
+                                <a href="https://example.com/node3" class="node-link" target="_blank">PARTE_03 :: INACTIVA</a>
+                                <span class="node-status">COMPLETED</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reward Modal -->
+    <div class="reward-modal" id="rewardModal">
+        <div class="reward-content">
+            <h2 class="glitch" data-text="ACCESS GRANTED">ACCESO CONCEDIDO</h2>
+            <span class="reward-icon">🎁</span>
+            <p style="margin: 20px 0; color: var(--neon-green);">Todas las partes han completadas con éxito. Recompensa desbloqueada.</p>
+            <button class="reward-button" onclick="window.open('https://your-reward-link.com', '_blank')">
+                RECLAMAR RECOMPENSA
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const time = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('time').textContent = time;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Terminal input handling
+        const terminalContent = document.getElementById('terminal');
+        const input = document.querySelector('.terminal-input');
+        
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value;
+                const newLine = document.createElement('p');
+                newLine.textContent = `$ ${command}`;
+                terminalContent.insertBefore(newLine, this.parentElement);
+                this.value = '';
+                
+                // Add response
+                const response = document.createElement('p');
+                response.textContent = `> Processing command: "${command}"...`;
+                response.style.color = '#00ff00';
+                terminalContent.insertBefore(response, this.parentElement);
+            }
+        });
+
+        // Node checkbox handling
+        const nodeCheckboxes = document.querySelectorAll('.node-checkbox');
+        const rewardModal = document.getElementById('rewardModal');
+
+        function checkAllNodesCompleted() {
+            const allChecked = Array.from(nodeCheckboxes).every(checkbox => checkbox.checked);
+            if (allChecked) {
+                rewardModal.style.display = 'flex';
+                // Add terminal message
+                const message = document.createElement('p');
+                message.textContent = '> Todas las partes han completadas con éxito. Recompensa desbloqueada.';
+                message.style.color = '#00ff00';
+                terminalContent.insertBefore(message, document.querySelector('.input-line'));
+            }
+        }
+
+        nodeCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const node = this.closest('.node');
+                if (this.checked) {
+                    node.classList.add('completed');
+                    // Add terminal message
+                    const message = document.createElement('p');
+                    message.textContent = `> Node ${node.querySelector('.node-link').textContent.split(' ')[0]} compromised.`;
+                    message.style.color = '#00ff00';
+                    terminalContent.insertBefore(message, document.querySelector('.input-line'));
+                } else {
+                    node.classList.remove('completed');
+                }
+                checkAllNodesCompleted();
+            });
+        });
+
+        // Close modal when clicking outside
+        rewardModal.addEventListener('click', function(e) {
+            if (e.target === rewardModal) {
+                rewardModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
